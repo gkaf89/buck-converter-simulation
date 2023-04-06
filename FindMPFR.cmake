@@ -1,4 +1,12 @@
 # Find MPFR
+#
+# Try to find the MPFR library
+#
+# On completion the following variables will be defined
+# 
+# MPFR_FOUND - system has MPFR
+# MPFR_INCLUDE_DIRS - the MPFR include directories
+# MPFR_LIBRARIES - Link these to use MPFR
 
 find_library(MPFR_LIBRARIES mpfr)
 find_path(MPFR_INCLUDE_DIRS mpfr.h)
