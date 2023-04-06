@@ -21,12 +21,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Ariadne.  If not, see <https://www.gnu.org/licenses/>.
 
+# Find MPFR
+find_package(MPFR REQUIRED)
+
 find_library(ARIADNE_LIBRARY ariadne)
 set(ARIADNE_LIBRARIES "${ARIADNE_LIBRARY}")
 
 find_path(ARIADNE_INCLUDE_DIR ariadne.hpp PATH_SUFFIXES ariadne)
 get_filename_component(ARIADNE_INCLUDE_PARENT_DIR ${ARIADNE_INCLUDE_DIR} DIRECTORY)
-set(ARIADNE_INCLUDE_DIRS ${ARIADNE_INCLUDE_PARENT_DIR} ${ARIADNE_INCLUDE_DIR})
+set(ARIADNE_INCLUDE_DIRS ${ARIADNE_INCLUDE_PARENT_DIR} ${ARIADNE_INCLUDE_DIR} ${MPFR_INCLUDE_DIR})
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Ariadne DEFAULT_MSG ARIADNE_LIBRARIES ARIADNE_INCLUDE_DIRS)
