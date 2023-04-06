@@ -3,3 +3,6 @@ build/**
 
 # Ignore vim swap files
 .*.swp
+
+# Ignore Qt Creator setup files
+CMakeLists.txt.user
