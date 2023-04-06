@@ -1,1 +1,5 @@
+# Compilation output
 build/**
+
+# Ignore vim swap files
+.*.swp
