@@ -6,3 +6,6 @@ build/**
 
 # Ignore Qt Creator setup files
 CMakeLists.txt.user
+
+# Ignore Onsidian markdown editor project files for the documentation
+.obsidian
