@@ -1,10 +1,6 @@
 function(set_output_dir_structure)
-	if(DEFINED OUTPUT_DIR_SET)
-		return()
-	endif()
-	
-	include(GNUInstallDirs RESULT_VARIABLE OUTPUT_DIR_SET)
-	set(OUTPUT_DIR_SET "${OUTPUT_DIR_SET}" PARENT_SCOPE)
+
+	include(GNUInstallDirs)
 
 	foreach(CONFIG ${CMAKE_CONFIGURATION_TYPES})
 		string(TOUPPER "${CONFIG}" CONFIG_SUFFIX)
@@ -13,4 +9,5 @@ function(set_output_dir_structure)
 		set("CMAKE_LIBRARY_OUTPUT_DIRECTORY_${CONFIG_SUFFIX}" "${CMAKE_BINARY_DIR}/${CONFIG}/${CMAKE_INSTALL_LIBDIR}" PARENT_SCOPE)
 		set("CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${CONFIG_SUFFIX}" "${CMAKE_BINARY_DIR}/${CONFIG}/${CMAKE_INSTALL_LIBDIR}" PARENT_SCOPE)
 	endforeach()
+
 endfunction()
