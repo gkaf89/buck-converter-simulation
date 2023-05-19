@@ -3,7 +3,7 @@
 # Once done this will define:
 #
 #  ARIADNE_FOUND - system has Ariadne
-#  ARIADNE_INCLUDE_DIRS - the Ariadne include directories
+#  ARIADNE_INCLUDES - the Ariadne include directories
 #  ARIADNE_LIBRARIES - Link these to use Ariadne
 
 # This file is part of Ariadne.
@@ -29,12 +29,12 @@ set(ARIADNE_LIBRARIES "${ARIADNE_LIBRARY}")
 
 find_path(ARIADNE_INCLUDE_DIR ariadne.hpp PATH_SUFFIXES ariadne)
 get_filename_component(ARIADNE_INCLUDE_PARENT_DIR ${ARIADNE_INCLUDE_DIR} DIRECTORY)
-set(ARIADNE_INCLUDE_DIRS ${ARIADNE_INCLUDE_PARENT_DIR} ${ARIADNE_INCLUDE_DIR} ${MPFR_INCLUDE_DIRS})
+set(ARIADNE_INCLUDES ${ARIADNE_INCLUDE_PARENT_DIR} ${ARIADNE_INCLUDE_DIR} ${MPFR_INCLUDES})
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(Ariadne DEFAULT_MSG ARIADNE_LIBRARIES ARIADNE_INCLUDE_DIRS)
+find_package_handle_standard_args(Ariadne DEFAULT_MSG ARIADNE_LIBRARIES ARIADNE_INCLUDES)
 
 mark_as_advanced(
-  ARIADNE_INCLUDE_DIRS
+  ARIADNE_INCLUDES
   ARIADNE_LIBRARIES
 )

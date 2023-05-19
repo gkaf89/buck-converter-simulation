@@ -20,7 +20,7 @@ set_output_dir_structure()
 find_package(Ariadne REQUIRED)
 
 # Add the headers to the includes
-include_directories(SYSTEM ${ARIADNE_INCLUDE_DIRS})
+include_directories(SYSTEM ${ARIADNE_INCLUDES})
 
 # Recipies for building sources
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src")
