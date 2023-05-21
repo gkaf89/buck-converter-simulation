@@ -25,3 +25,20 @@ function(set_output_dir_structure)
 		set_output_dir_structure_single_config()
 	endif()
 endfunction()
+
+function(set_runtime_install_dir_structure target_name)
+	get_property(isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+
+	if(isMultiConfig)
+		foreach(CONFIG ${CMAKE_CONFIGURATION_TYPES})
+			install(TARGETS "${target_name}"
+				CONFIGURATIONS "${CONFIG}"
+				RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/bin/${CONFIG}"
+			)
+		endforeach()
+	else()
+		install(TARGETS "${target_name}"
+			RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/bin/${CMAKE_BUILD_TYPE}"
+		)
+	endif()
+endfunction()
