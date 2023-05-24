@@ -53,26 +53,29 @@ function(extract_rpath libraries rpath)
 	set("${rpath}" "${local_rpath}" PARENT_SCOPE)
 endfunction()
 
-function(target_link_sanitized_library target library rpath)
-	set(configurations "${ARGV3}")
-
+function(generate_sanitized_library library rpath link_library)
 	get_filename_component(library_name "${library}" NAME)
 	set(local_library "${CMAKE_BINARY_DIR}/lib/${library_name}")
 
-	add_custom_command(TARGET "${target}"
-		PRE_LINK
-		COMMAND "mkdir" ARGS "-p" "${CMAKE_BINARY_DIR}/lib"
+	add_custom_command(OUTPUT "${local_library}"
 		COMMAND "cp" ARGS "${library}" "${local_library}"
-		COMMAND "patchelf" ARGS "--force-rpath" "${rpath}" "${local_library}"
+		COMMAND "mkdir" ARGS "-p" "${CMAKE_BINARY_DIR}/lib"
+		COMMAND "patchelf" ARGS "--set-rpath" "${rpath}" "--force-rpath" "${local_library}"
 	)
 
-	#target_link_libraries("${target}" "${local_library}" "${configuration}")
+	get_filename_component(library_target "${library}" NAME_WE)
+	add_custom_target("${library_target}" DEPENDS "${local_library}")
+
+	set("${link_library}" "${local_library}" PARENT_SCOPE)
 endfunction()
 
-function(target_link_sanitized_libraries target libraries rpath)
-	set(configurations "${ARGV3}")
+function(generate_sanitized_libraries libraries rpath link_libraries)
+	set(local_libraries "")
 
 	foreach(library "${libraries}")
-		target_link_sanitized_library("${target}" "${library}" "${rpath}" "${configurations}")
+		generate_sanitized_library("${library}" "${rpath}" local_library)
+		list(APPEND local_libraries "${local_library}")
 	endforeach()
+
+	set("${link_libraries}" "${local_libraries}" PARENT_SCOPE)
 endfunction()
