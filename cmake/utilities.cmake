@@ -42,3 +42,37 @@ function(set_runtime_install_dir_structure target_name)
 		)
 	endif()
 endfunction()
+
+function(extract_rpath libraries rpath)
+	set(local_rpath "")
+	foreach(library "${libraries}")
+		get_filename_component(path "${library}" DIRECTORY)
+		list(APPEND local_rpath "${path}")
+	endforeach()
+
+	set("${rpath}" "${local_rpath}" PARENT_SCOPE)
+endfunction()
+
+function(target_link_sanitized_library target library rpath)
+	set(configurations "${ARGV3}")
+
+	get_filename_component(library_name "${library}" NAME)
+	set(local_library "${CMAKE_BINARY_DIR}/lib/${library_name}")
+
+	add_custom_command(TARGET "${target}"
+		PRE_LINK
+		COMMAND "mkdir" ARGS "-p" "${CMAKE_BINARY_DIR}/lib"
+		COMMAND "cp" ARGS "${library}" "${local_library}"
+		COMMAND "patchelf" ARGS "--force-rpath" "${rpath}" "${local_library}"
+	)
+
+	#target_link_libraries("${target}" "${local_library}" "${configuration}")
+endfunction()
+
+function(target_link_sanitized_libraries target libraries rpath)
+	set(configurations "${ARGV3}")
+
+	foreach(library "${libraries}")
+		target_link_sanitized_library("${target}" "${library}" "${rpath}" "${configurations}")
+	endforeach()
+endfunction()
