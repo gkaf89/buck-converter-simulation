@@ -69,11 +69,12 @@ function(generate_sanitized_library library rpath link_library)
 	set("${link_library}" "${local_library}" PARENT_SCOPE)
 endfunction()
 
-function(generate_sanitized_libraries libraries rpath link_libraries)
-	set(local_libraries "")
+function(generate_sanitized_libraries libraries rpath link_libraries)	
+	string(REPLACE ";" ":" posix_rpath "${rpath}")
 
+	set(local_libraries "")
 	foreach(library "${libraries}")
-		generate_sanitized_library("${library}" "${rpath}" local_library)
+		generate_sanitized_library("${library}" "${posix_rpath}" local_library)
 		list(APPEND local_libraries "${local_library}")
 	endforeach()
 
