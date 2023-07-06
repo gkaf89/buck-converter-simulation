@@ -58,7 +58,6 @@ function(generate_sanitized_library library rpath link_library)
 	set(local_library "${CMAKE_BINARY_DIR}/lib/${library_name}")
 
 	add_custom_command(OUTPUT "${local_library}"
-		COMMAND "mkdir" ARGS "-p" "${CMAKE_BINARY_DIR}/lib"
 		COMMAND "cp" ARGS "${library}" "${local_library}"
 		COMMAND "patchelf" ARGS "--set-rpath" "${rpath}" "--force-rpath" "${local_library}"
 	)
