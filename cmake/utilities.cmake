@@ -22,39 +22,72 @@ function(set_runtime_install_dir_structure target_name)
 	)
 endfunction()
 
-function(extract_rpath libraries rpath)
-	set(local_rpath "")
-	foreach(library "${libraries}")
-		get_filename_component(path "${library}" DIRECTORY)
-		list(APPEND local_rpath "${path}")
+function(extract_library_names library_paths libraries)
+	set(local_libraries "")
+	foreach(library_path ${library_paths})
+		get_filename_component(library "${library_path}" NAME)
+		list(APPEND local_libraries "${library}")
 	endforeach()
 
+	set("${libraries}" "${local_libraries}" PARENT_SCOPE)
+endfunction()
+
+function(extract_rpath library_paths rpath)
+	set(local_rpath "")
+	foreach(library ${library_paths})
+		get_filename_component(path "${library}" DIRECTORY)
+		list(APPEND local_rpath "${path}")
+        endforeach()
+ 
 	set("${rpath}" "${local_rpath}" PARENT_SCOPE)
 endfunction()
 
-function(generate_sanitized_library library rpath link_library)
-	get_filename_component(library_name "${library}" NAME)
-	set(local_library "${CMAKE_BINARY_DIR}/lib/${library_name}")
+function(set_rpath local_target_file needed_library_paths patch_command)
+	extract_rpath("${needed_library_paths}" rpath)
 
-	add_custom_command(OUTPUT "${local_library}"
-		COMMAND "cp" ARGS "${library}" "${local_library}"
-		COMMAND "patchelf" ARGS "--set-rpath" "${rpath}" "--force-rpath" "${local_library}"
-	)
-
-	get_filename_component(library_target "${library}" NAME_WE)
-	add_custom_target("${library_target}" DEPENDS "${local_library}")
-
-	set("${link_library}" "${local_library}" PARENT_SCOPE)
-endfunction()
-
-function(generate_sanitized_libraries libraries rpath link_libraries)	
 	string(REPLACE ";" ":" posix_rpath "${rpath}")
 
-	set(local_libraries "")
-	foreach(library "${libraries}")
-		generate_sanitized_library("${library}" "${posix_rpath}" local_library)
-		list(APPEND local_libraries "${local_library}")
+	set(patch_command "COMMAND" ":" "&&"
+		"patchelf" "--set-rpath" "${posix_rpath}" "--force-rpath" "${local_target_file}"
+		PARENT_SCOPE
+	)
+endfunction()
+
+function(set_needed_libraries target_file local_target_file needed_library_paths patch_command)
+	extract_library_names("${needed_library_paths}" needed_libraries)
+
+	set(local_patch_command "")
+	foreach(library ${needed_libraries})
+		list(APPEND local_patch_command "COMMAND"  ":" "&&"
+			"{" 
+				"(" "readelf" "-d" "${target_file}" 
+					"|" "grep" "\"(NEEDED)\"" 
+					"|" "grep" "${library}" "1>/dev/null"
+				")" 
+				"||" 
+				"patchelf" "--add-needed" "${library}" "${local_target_file}"
+			"\;" "}"
+		)
 	endforeach()
 
-	set("${link_libraries}" "${local_libraries}" PARENT_SCOPE)
+	set("${patch_command}" "${local_patch_command}" PARENT_SCOPE)
+endfunction()
+
+function(generate_test_binary target needed_library_paths)
+	set(local_target "LOCAL_${target}")
+	set(local_target_file "${CMAKE_BINARY_DIR}/local/${CMAKE_INSTALL_BINDIR}/${target}")
+	set(target_file "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${target}")
+
+	set_rpath("${local_target_file}" "${needed_library_paths}" patch_rpath_command)
+
+	set_needed_libraries("${target_file}" "${local_target_file}" "${needed_library_paths}" patch_needed_libraries_command)
+
+	add_custom_command(OUTPUT "${local_target_file}"
+		DEPENDS "$<TARGET_FILE:${target}>"
+		COMMAND "cp" "$<TARGET_FILE:${target}>" "${local_target_file}"
+		${patch_rpath_command}
+		${patch_needed_libraries_command}
+	)
+
+	add_custom_target("${local_target}" ALL DEPENDS "${local_target_file}")
 endfunction()
