@@ -2,6 +2,8 @@ macro(set_output_dir_structure_single_config)
 	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}" PARENT_SCOPE)
 	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}" PARENT_SCOPE)
 	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}" PARENT_SCOPE)
+
+	set(CMAKE_INSTALL_BINDIR "${CMAKE_INSTALL_PREFIX}/bin/${CMAKE_BUILD_TYPE}" PARENT_SCOPE)
 endmacro()
 
 function(set_output_dir_structure)
@@ -14,12 +16,6 @@ function(set_output_dir_structure)
 	else()
 		set_output_dir_structure_single_config()
 	endif()
-endfunction()
-
-function(set_runtime_install_dir_structure target_name)
-	install(TARGETS "${target_name}"
-		RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/bin/${CMAKE_BUILD_TYPE}"
-	)
 endfunction()
 
 function(extract_library_names library_paths libraries)

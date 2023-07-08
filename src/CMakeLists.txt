@@ -11,4 +11,6 @@ target_link_libraries(hybrid_evolution_tutorial "${hybrid_evolution_tutorial_lib
 generate_test_binary(hybrid_evolution_tutorial "${hybrid_evolution_tutorial_libraries}")
 
 # Define installation diretory
-set_runtime_install_dir_structure(hybrid_evolution_tutorial)
+install(TARGETS hybrid_evolution_tutorial
+	RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+)
