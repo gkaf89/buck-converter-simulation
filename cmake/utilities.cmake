@@ -3,7 +3,7 @@ macro(set_output_dir_structure_single_config)
 	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}" PARENT_SCOPE)
 	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}" PARENT_SCOPE)
 
-	set(CMAKE_INSTALL_BINDIR "${CMAKE_INSTALL_PREFIX}/bin/${CMAKE_BUILD_TYPE}" PARENT_SCOPE)
+	#set(CMAKE_INSTALL_BINDIR "${CMAKE_INSTALL_PREFIX}/bin/${CMAKE_BUILD_TYPE}" PARENT_SCOPE)
 endmacro()
 
 function(set_output_dir_structure)
@@ -49,14 +49,14 @@ function(set_rpath local_target_file needed_library_paths patch_command)
 	)
 endfunction()
 
-function(set_needed_libraries target_file local_target_file needed_library_paths patch_command)
+function(set_needed_libraries target local_target_file needed_library_paths patch_command)
 	extract_library_names("${needed_library_paths}" needed_libraries)
 
 	set(local_patch_command "")
 	foreach(library ${needed_libraries})
 		list(APPEND local_patch_command "COMMAND"  ":" "&&"
 			"{" 
-				"(" "readelf" "-d" "${target_file}" 
+				"(" "readelf" "-d" "$<TARGET_FILE:${target}>" 
 					"|" "grep" "\"(NEEDED)\"" 
 					"|" "grep" "${library}" "1>/dev/null"
 				")" 
@@ -76,7 +76,7 @@ function(generate_test_binary target needed_library_paths)
 
 	set_rpath("${local_target_file}" "${needed_library_paths}" patch_rpath_command)
 
-	set_needed_libraries("${target_file}" "${local_target_file}" "${needed_library_paths}" patch_needed_libraries_command)
+	set_needed_libraries("${target}" "${local_target_file}" "${needed_library_paths}" patch_needed_libraries_command)
 
 	add_custom_command(OUTPUT "${local_target_file}"
 		DEPENDS "$<TARGET_FILE:${target}>"
