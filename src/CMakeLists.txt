@@ -12,5 +12,5 @@ generate_test_binary(hybrid_evolution_tutorial "${hybrid_evolution_tutorial_libr
 
 # Define installation diretory
 install(TARGETS hybrid_evolution_tutorial
-	RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+	RUNTIME DESTINATION "${INSTALL_BINDIR}"
 )
