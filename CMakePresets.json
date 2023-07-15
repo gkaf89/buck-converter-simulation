@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 20,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "default-config",
+      "binaryDir": "${sourceDir}/build/Release",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_PREFIX_PATH" : "$env{HOME}/opt/ariadne/cxx;$env{HOME}/opt/mpfr;$env{HOME}/opt/gmp",
+        "CMAKE_INSTALL_PREFIX": "$env{HOME}/usr/opt/buck-converter-simulator"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "default-build",
+      "configurePreset": "default-config"
+    }
+  ]
+}
