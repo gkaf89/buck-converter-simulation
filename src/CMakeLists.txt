@@ -4,7 +4,7 @@ add_executable(hybrid_evolution_tutorial hybrid_evolution_tutorial.cpp)
 # Instruct to link against the ariadne library
 target_link_libraries(hybrid_evolution_tutorial
 	PRIVATE "${ARIADNE_LIBRARIES}"
-	PRIVATE "${MPFR_LIBRARIES}"
+	PRIVATE "${MPFR_LIBRARIES}" # Ensure the execuable find the correct MPFR and GMP libraries 
 	PRIVATE "${GMP_LIBRARIES}"
 )
 
