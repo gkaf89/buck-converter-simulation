@@ -27,7 +27,7 @@
 using namespace Ariadne;
 
 //! [get_converter]
-HybridAutomaton get_converter( StringVariable const& circuit,
+static HybridAutomaton get_converter( StringVariable const& circuit,
                                DiscreteEvent const& turn_on, DiscreteEvent const& turn_off,
                                String const& on_tag, String const& off_tag,
                                RealVariable const& i_L, RealVariable const& v_C,
@@ -53,7 +53,7 @@ HybridAutomaton get_converter( StringVariable const& circuit,
 //! [get_converter]
 
 //! [get_controller]
-HybridAutomaton get_controller( StringVariable const& bridge_switch,
+static HybridAutomaton get_controller( StringVariable const& bridge_switch,
                                 DiscreteEvent const& turn_on, DiscreteEvent const& turn_off,
                                 String const& on_tag, String const& off_tag,
                                 RealVariable const& i_L, RealVariable const& v_C,
@@ -94,7 +94,7 @@ HybridAutomaton get_controller( StringVariable const& bridge_switch,
 //! [get_controller]
 
 //! [simulate_evolution]
-Void simulate_evolution( CompositeHybridAutomaton const& system, HybridBoundedConstraintSet const& initial_set, HybridTime const& final_time,
+static Void simulate_evolution( CompositeHybridAutomaton const& system, HybridBoundedConstraintSet const& initial_set, HybridTime const& final_time,
                          TimeVariable const& time, RealVariable const& i_L, RealVariable const& v_C )
 {
     // Create a simulator object
@@ -119,7 +119,7 @@ Void simulate_evolution( CompositeHybridAutomaton const& system, HybridBoundedCo
 //! [simulate_evolution]
 
 //! [create_evolver]
-GeneralHybridEvolver create_evolver(CompositeHybridAutomaton const& system)
+static GeneralHybridEvolver create_evolver(CompositeHybridAutomaton const& system)
 {
     // Create a GeneralHybridEvolver object
     GeneralHybridEvolver evolver(system);
@@ -135,7 +135,7 @@ GeneralHybridEvolver create_evolver(CompositeHybridAutomaton const& system)
 //! [create_evolver]
 
 //! [evaluate_evolution]
-Void evaluate_evolution( CompositeHybridAutomaton const& system, HybridBoundedConstraintSet const& initial_set, HybridTime const& final_time,
+static Void evaluate_evolution( CompositeHybridAutomaton const& system, HybridBoundedConstraintSet const& initial_set, HybridTime const& final_time,
                          TimeVariable const& time, RealVariable const& i_L, RealVariable const& v_C )
 {
     GeneralHybridEvolver const evolver( create_evolver(system) );
@@ -156,7 +156,7 @@ Void evaluate_evolution( CompositeHybridAutomaton const& system, HybridBoundedCo
 //! [evaluate_evolution]
 
 //! [get_system]
-CompositeHybridAutomaton get_system( StringVariable const& circuit, StringVariable const& bridge_switch,
+static CompositeHybridAutomaton get_system( StringVariable const& circuit, StringVariable const& bridge_switch,
                                      DiscreteEvent const& turn_on, DiscreteEvent const& turn_off,
                                      String const& on_tag, String const& off_tag,
                                      RealVariable const& i_L, RealVariable const& v_C )
@@ -201,7 +201,7 @@ CompositeHybridAutomaton get_system( StringVariable const& circuit, StringVariab
 //! [get_system]
 
 //! [get_initial_set]
-HybridBoundedConstraintSet get_initial_set(	StringVariable const& bridge_switch, StringVariable const& circuit,
+static HybridBoundedConstraintSet get_initial_set(	StringVariable const& bridge_switch, StringVariable const& circuit,
                                             RealVariable const& i_L, RealVariable const& v_C,
                                             RealConstant const& i_L_0, RealConstant const& v_C_0, String const& state_tag_0 )
 {
@@ -218,7 +218,7 @@ HybridBoundedConstraintSet get_initial_set(	StringVariable const& bridge_switch,
 //! [get_initial_set]
 
 //! [get_final_time]
-HybridTime get_final_time()
+static HybridTime get_final_time()
 {
     // Define the final time: continuous time and maximum number of transitions
     HybridTime final_time(2e-2_dec, 15'000);
@@ -229,7 +229,7 @@ HybridTime get_final_time()
 //! [get_final_time]
 
 //! //! [get_evolution_final_time]
-HybridTime get_evolution_final_time()
+static HybridTime get_evolution_final_time()
 {
     // Define the final time: continuous time and maximum number of transitions
     HybridTime final_time(3.27e-3_dec, 15'000);
