@@ -118,6 +118,43 @@ Void simulate_evolution( CompositeHybridAutomaton const& system, HybridBoundedCo
 }
 //! [simulate_evolution]
 
+//! [create_evolver]
+GeneralHybridEvolver create_evolver(CompositeHybridAutomaton const& system)
+{
+    // Create a GeneralHybridEvolver object
+    GeneralHybridEvolver evolver(system);
+
+    // Set the evolver configuration
+    evolver.configuration().set_maximum_enclosure_radius(300.0);
+    evolver.configuration().set_maximum_step_size(1e-6);
+
+    CONCLOG_PRINTLN_VAR(evolver.configuration());
+
+    return evolver;
+}
+//! [create_evolver]
+
+//! [evaluate_evolution]
+Void evaluate_evolution( CompositeHybridAutomaton const& system, HybridBoundedConstraintSet const& initial_set, HybridTime const& final_time,
+                         TimeVariable const& time, RealVariable const& i_L, RealVariable const& v_C )
+{
+    GeneralHybridEvolver const evolver( create_evolver(system) );
+
+    // Compute the orbit using upper semantics
+    CONCLOG_PRINTLN("Computing evolution flow tube...");
+    Orbit<HybridEnclosure> orbit = evolver.orbit( initial_set, final_time, Semantics::UPPER );
+
+    Decimal time_end = Decimal(final_time.continuous_time().get_d());
+
+    // Plot the flow tube using three different projections
+    CONCLOG_PRINTLN("Plotting evolution flow tube...");
+    plot( "finite_time_evolution_t-i_L", Axes2d( 0<=time<=time_end, -1<=i_L<=25 ), orbit );
+    plot( "finite_time_evolution_t-v_C", Axes2d( 0<=time<=time_end, -5<=v_C<=60 ), orbit );
+    plot( "finite_time_evolution_i_L-v_C", Axes2d( -1<=i_L<=25, -5<=v_C<=60 ), orbit );
+    CONCLOG_PRINTLN("Done computing and plotting evolution flow tube!");
+}
+//! [evaluate_evolution]
+
 //! [get_system]
 CompositeHybridAutomaton get_system( StringVariable const& circuit, StringVariable const& bridge_switch,
                                      DiscreteEvent const& turn_on, DiscreteEvent const& turn_off,
@@ -191,6 +228,17 @@ HybridTime get_final_time()
 }
 //! [get_final_time]
 
+//! //! [get_evolution_final_time]
+HybridTime get_evolution_final_time()
+{
+    // Define the final time: continuous time and maximum number of transitions
+    HybridTime final_time(3.27e-3_dec, 15'000);
+    CONCLOG_PRINTLN_VAR(final_time);
+
+    return final_time;
+}
+//! [get_evolution_final_time]
+
 //! [main]
 Int main(Int argc, const char* argv[])
 {
@@ -228,11 +276,15 @@ Int main(Int argc, const char* argv[])
 
     // Get the final time
     auto final_time = get_final_time();
+    auto evolution_finite_time = get_evolution_final_time();
 
     // Compute an approximate simulation of the system evolution
 
     TimeVariable const time;
     simulate_evolution( system, initial_set, final_time,
+                        time, i_L, v_C );
+
+    evaluate_evolution( system, initial_set, evolution_finite_time,
                         time, i_L, v_C );
 
     return EXIT_SUCCESS;
