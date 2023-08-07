@@ -12,8 +12,18 @@
       "generator": "Ninja",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_PREFIX_PATH" : "$env{HOME}/opt/ariadne/cxx;$env{HOME}/opt/mpfr;$env{HOME}/opt/gmp",
-        "CMAKE_INSTALL_PREFIX": "$env{HOME}/usr/opt/buck-converter-simulator"
+        "CMAKE_PREFIX_PATH" : "$env{HOME}/opt/ariadne/Release/cxx;$env{HOME}/opt/mpfr;$env{HOME}/opt/gmp",
+        "CMAKE_INSTALL_PREFIX": "$env{HOME}/usr/opt/buck-converter-simulator/Release"
+      }
+    },
+    {
+      "name": "debug-config",
+      "binaryDir": "${sourceDir}/build/Debug",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_PREFIX_PATH" : "$env{HOME}/opt/ariadne/Debug/cxx;$env{HOME}/opt/mpfr;$env{HOME}/opt/gmp",
+        "CMAKE_INSTALL_PREFIX": "$env{HOME}/usr/opt/buck-converter-simulator/Debug"
       }
     }
   ],
@@ -21,6 +31,10 @@
     {
       "name": "default-build",
       "configurePreset": "default-config"
+    },
+    {
+      "name": "debug-build",
+      "configurePreset": "debug-config"
     }
   ]
 }

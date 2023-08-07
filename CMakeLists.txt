@@ -10,6 +10,15 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}")
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+if( CMAKE_BUILD_TYPE STREQUAL "Release" )
+	message(STATUS "Configuring a release build...")
+	message(STATUS "CXX flags: ${CMAKE_CXX_FLAGS_RELEASE}")
+elseif( CMAKE_BUILD_TYPE STREQUAL "Debug" )
+	message(STATUS "Configuring a debug build...")
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
+	message(STATUS "CXX flags: ${CMAKE_CXX_FLAGS_DEBUG}")
+endif()
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # Set output directory structure
