@@ -1,6 +1,12 @@
 # Preferable to avoid warnings during execution
 cmake_minimum_required(VERSION 3.9)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+if (DEFINED PRESET_NAME)
+	include(preset_configuration)
+endif()
+
 project(BuckConverter VERSION 0.1)
 
 # Set to search the root source directory for the FindAriadne.cmake module
@@ -18,8 +24,6 @@ elseif( CMAKE_BUILD_TYPE STREQUAL "Debug" )
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
 	message(STATUS "CXX flags: ${CMAKE_CXX_FLAGS_DEBUG}")
 endif()
-
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # Set output directory structure
 include(utilities)
