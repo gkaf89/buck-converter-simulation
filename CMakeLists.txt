@@ -1,32 +1,22 @@
 # Preferable to avoid warnings during execution
 cmake_minimum_required(VERSION 3.9)
 
+# Add directory with utility functions in the serach path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+# Include basic utility fuinctions
+include(utilities)
 
 project(BuckConverter VERSION 0.1)
 
-# Set to search the root source directory for the FindAriadne.cmake module
+# Set to search the root source directory for the FindAriadne.cmake and other modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}")
 
 # Set the C++ standard to C++20, as used by Ariadne
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if( CMAKE_BUILD_TYPE STREQUAL "Release" )
-	message(STATUS "Configuring a release build...")
-	message(STATUS "CXX flags: ${CMAKE_CXX_FLAGS_RELEASE}")
-elseif( CMAKE_BUILD_TYPE STREQUAL "Debug" )
-	message(STATUS "Configuring a debug build...")
-	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
-	message(STATUS "CXX flags: ${CMAKE_CXX_FLAGS_DEBUG}")
-else()
-	message(STATUS "Build type not specified, defaulting to a release build...")
-	set(CMAKE_BUILD_TYPE CACHE STRING "Release")
-	message(STATUS "CXX flags: ${CMAKE_CXX_FLAGS_RELEASE}")
-endif()
-
-# Set output directory structure
-include(utilities)
+set_build_type_parameters()
 set_output_dir_structure()
 
 # Find Ariadne
