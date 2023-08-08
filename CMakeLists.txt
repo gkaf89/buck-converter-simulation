@@ -23,6 +23,10 @@ elseif( CMAKE_BUILD_TYPE STREQUAL "Debug" )
 	message(STATUS "Configuring a debug build...")
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
 	message(STATUS "CXX flags: ${CMAKE_CXX_FLAGS_DEBUG}")
+else()
+	message(STATUS "Build type not specified, defaulting to a release build...")
+	set(CMAKE_BUILD_TYPE CACHE STRING "Release")
+	message(STATUS "CXX flags: ${CMAKE_CXX_FLAGS_RELEASE}")
 endif()
 
 # Set output directory structure
