@@ -7,20 +7,27 @@
   },
   "configurePresets": [
     {
-      "name": "Release",
+      "name": "default",
+      "hidden": true,
       "binaryDir": "${sourceDir}/build/${presetName}",
       "generator": "Ninja",
       "cacheVariables": {
-	"PRESET_NAME": { "type": "String", "value": "${presetName}" }
+        "CMAKE_BUILD_TYPE": { "type": "String", "value": "$env{PRESET_BUILD_TYPE}" },
+        "CMAKE_PREFIX_PATH" : { "type": "Path", "value": "$env{HOME}/opt/ariadne/$env{PRESET_BUILD_TYPE}/cxx;$env{HOME}/opt/mpfr;$env{HOME}/opt/gmp" },
+        "CMAKE_INSTALL_PREFIX": { "type": "Path", "value": "$env{HOME}/usr/opt/buck-converter-simulation" }
+      },
+      "environment": {
+        "PRESET_NAME" : "${presetName}",
+        "PRESET_BUILD_TYPE": "$env{PRESET_NAME}"
       }
     },
     {
+      "name": "Release",
+      "inherits": "default"
+    },
+    {
       "name": "Debug",
-      "binaryDir": "${sourceDir}/build/${presetName}",
-      "generator": "Ninja",
-      "cacheVariables": {
-	"PRESET_NAME": { "type": "String", "value": "${presetName}" }
-      }
+      "inherits": "default"
     }
   ],
   "buildPresets": [

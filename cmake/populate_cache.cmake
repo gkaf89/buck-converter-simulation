@@ -8,6 +8,4 @@ else()
 	message(FATAL_ERROR "Unsupported preset")
 endif()
 
-set(CMAKE_INSTALL_PREFIX "$ENV{HOME}/usr/opt/buck-converter-simulator/${PRESET_NAME}" CACHE PATH "Local installation path")
-
-set(CMAKE_PREFIX_PATH "$ENV{HOME}/opt/ariadne/${PRESET_NAME}/cxx;$ENV{HOME}/lib/mpfr;$ENV{HOME}/lib/gmp" CACHE PATH "Search path for locally installed Ariadne, MPFR, and GMP librarires" FORCE)
+set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH}" CACHE PATH "Search path for locally installed Ariadne, MPFR, and GMP librarires" FORCE)
