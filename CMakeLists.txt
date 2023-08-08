@@ -1,16 +1,13 @@
 # Preferable to avoid warnings during execution
 cmake_minimum_required(VERSION 3.9)
 
-# Add directory with utility functions in the serach path
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+# Add directory with utility functions and modules in the serach path
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 # Include basic utility fuinctions
 include(utilities)
 
 project(BuckConverter VERSION 0.1)
-
-# Set to search the root source directory for the FindAriadne.cmake and other modules
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}")
 
 # Set the C++ standard to C++20, as used by Ariadne
 set(CMAKE_CXX_STANDARD 20)
