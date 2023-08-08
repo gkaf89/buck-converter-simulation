@@ -3,10 +3,6 @@ cmake_minimum_required(VERSION 3.9)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-if (DEFINED PRESET_NAME)
-	include(populate_cache)
-endif()
-
 project(BuckConverter VERSION 0.1)
 
 # Set to search the root source directory for the FindAriadne.cmake module
